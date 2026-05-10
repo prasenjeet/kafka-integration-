@@ -23,7 +23,9 @@ public class KafkaAdminService {
             return result.allTopicNames().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Failed to describe topics: {}", topicNames, e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             return Collections.emptyMap();
         }
     }
@@ -34,7 +36,9 @@ public class KafkaAdminService {
             return result.names().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Failed to list topics", e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             return Collections.emptySet();
         }
     }
@@ -47,7 +51,9 @@ public class KafkaAdminService {
             log.info("Topic created: name={}, partitions={}, replication={}", topicName, partitions, replicationFactor);
         } catch (InterruptedException | ExecutionException e) {
             log.error("Failed to create topic: {}", topicName, e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -57,7 +63,9 @@ public class KafkaAdminService {
             log.info("Topic deleted: {}", topicName);
         } catch (InterruptedException | ExecutionException e) {
             log.error("Failed to delete topic: {}", topicName, e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -89,7 +97,9 @@ public class KafkaAdminService {
             return offsets;
         } catch (InterruptedException | ExecutionException e) {
             log.error("Failed to get consumer group offsets for group: {}", groupId, e);
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             return Collections.emptyMap();
         }
     }
