@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: kafka-integration-sample
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+
+    consumer:
+      group-id: kafka-integration-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "com.example.kafka.model"
+
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+      concurrency: 3
+
+kafka:
+  topics:
+    orders: orders-topic
+    payments: payments-topic
+    notifications: notifications-topic
+  partitions: 3
+  replication-factor: 1
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.example.kafka: DEBUG
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
